@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey"
+    android:padding="4dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewItemReceivedMessageProfilePicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardBackgroundColor="@color/grey"
+        app:cardCornerRadius="100dp"
+        app:layout_constraintBottom_toBottomOf="@id/textViewItemReceivedMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewItemReceivedMessage">
+
+        <ImageView
+            android:id="@+id/imageViewItemReceivedMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_account_circle" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textViewItemReceivedMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_received_message"
+        android:padding="8dp"
+        android:textColor="@color/dark_grey"
+        android:textSize="16dp"
+        app:layout_constraintWidth_max="wrap"
+        app:layout_constraintStart_toEndOf="@+id/cardViewItemReceivedMessageProfilePicture"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <TextView
+        android:id="@+id/textViewItemReceivedMessageDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewItemReceivedMessage" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
