@@ -33,8 +33,4 @@ public class UserListViewModel extends AndroidViewModel {
         return mutableLiveData;
     }
 
-    public void clearUsers() {
-        userListRepository.clearUsers();
-    }
-
 }

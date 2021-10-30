@@ -24,7 +24,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_SENT = 1;
     private static final int VIEW_TYPE_RECEIVED = 2;
 
-    private List<ChatMessage> chatMessages = new ArrayList<>();
+    private List<ChatMessage> chatMessages;
     private final User receiver;
     private final User sender;
 
@@ -70,7 +70,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return chatMessages.size();
+        if (chatMessages == null) return 0;
+        else return chatMessages.size();
     }
 
     @Override
@@ -95,12 +96,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             binding.textViewItemSentMessageDateTime.setText(formatDateTime(chatMessage.getDate_object()));
         }
 
+
         private String formatDateTime(Date date_object) {
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MMMM.yyyy. HH:mm", Locale.getDefault());
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault());
-            return simpleDateFormat.format(date_object);
+            Date date = new Date();
+            if (date_object.getDate() == date.getDate()) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                return simpleDateFormat.format(date_object);
+            } else {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy.", Locale.getDefault());
+                return simpleDateFormat.format(date_object);
+            }
         }
     }
+
 
     static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
         private final ListItemRecievedMessageBinding binding;
@@ -117,8 +125,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         private String formatDateTime(Date date_object) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MMMM.yyyy. HH:mm", Locale.getDefault());
-            return simpleDateFormat.format(date_object);
+            Date date = new Date();
+            if (date_object.getDate() == date.getDate()) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                return simpleDateFormat.format(date_object);
+            } else {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yy.", Locale.getDefault());
+                return simpleDateFormat.format(date_object);
+            }
         }
     }
 }

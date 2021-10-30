@@ -33,7 +33,6 @@ public class UsersFragment extends Fragment implements UserAdapter.OnUserClickLi
 
     //viewModel
     private UserListViewModel userListViewModel;
-    private LoginRegisterViewModel loginRegisterViewModel;
 
     //user
     private User currentUser;
@@ -41,18 +40,13 @@ public class UsersFragment extends Fragment implements UserAdapter.OnUserClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginRegisterViewModel = new ViewModelProvider(this).get(LoginRegisterViewModel.class);
-        loginRegisterViewModel.getIsUserSignedIn().observe(this, aBoolean -> {
-            if (!aBoolean) {
-                navController.navigate(R.id.action_usersFragment_to_loginFragment);
-            }
-        });
 
         userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+
         userListViewModel.getCurrentUserMutableLiveData().observe(this, user -> {
             currentUser = user;
-            binding.textViewUsersContacts.setText(currentUser.getUser_name());
         });
+
         userListViewModel.getMutableLiveData().observe(this, users -> {
             userAdapter.setUsers(users);
             userAdapter.notifyDataSetChanged();
@@ -95,13 +89,8 @@ public class UsersFragment extends Fragment implements UserAdapter.OnUserClickLi
 
 
     private void setListeners() {
-        binding.imageViewUsersLogout.setOnClickListener(v -> logOut());
-        binding.imageViewUsersEditUser.setOnClickListener(v ->
-                navController.navigate(R.id.action_usersFragment_to_profileFragment));
-    }
-
-    private void logOut() {
-        loginRegisterViewModel.signOut();
+        binding.imageViewUsersBack.setOnClickListener(v ->
+                navController.navigate(R.id.action_usersFragment_to_recentConversationsFragment));
     }
 
     @Override
@@ -113,21 +102,14 @@ public class UsersFragment extends Fragment implements UserAdapter.OnUserClickLi
         navController.navigate(usersFragmentToChatFragment);
     }
 
-    private void showToast(String s) {
-        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
-    public void onResume() {
-        super.onResume();
-        loginRegisterViewModel.setStatus(Constants.STATUS_ONLINE);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        loginRegisterViewModel.setStatus(Constants.STATUS_OFFLINE);
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        userListViewModel.getMutableLiveData().observe(getViewLifecycleOwner(), users -> {
+            userAdapter.setUsers(users);
+            userAdapter.notifyDataSetChanged();
+            isProgressBarVisible(false);
+        });
     }
 
     @Override

@@ -74,12 +74,32 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_recycler_view"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarRecentConversations" />
+
+    <ImageView
+        android:id="@+id/imageViewRecentConversationsLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarRecentConversations"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_logout" />
+
+    <ImageView
+        android:id="@+id/imageViewRecentConversationsEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbarRecentConversations"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewRecentConversationsLogout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_edit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

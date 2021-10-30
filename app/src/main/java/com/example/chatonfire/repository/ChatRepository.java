@@ -4,20 +4,25 @@ import android.app.Application;
 import android.os.Build;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.chatonfire.model.ChatMessage;
+import com.example.chatonfire.model.Conversation;
 import com.example.chatonfire.model.User;
 import com.example.chatonfire.utility.Constants;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -28,20 +33,30 @@ public class ChatRepository {
     //firebase
     private FirebaseFirestore firebaseFirestore;
 
-    //Chat
+    //chat
     private ChatMessage chatMessage;
     private List<ChatMessage> chatMessages;
     private MutableLiveData<List<ChatMessage>> chatMessageListMutableLiveData;
 
+    //conversation
+    private Conversation conversation;
+
     //mutableLiveData
     private MutableLiveData<User> userSenderMutableLiveData;
+    private MutableLiveData<Conversation> conversationMutableLiveData;
+
 
     public ChatRepository(Application application) {
         this.application = application;
         firebaseFirestore = FirebaseFirestore.getInstance();
         userSenderMutableLiveData = new MutableLiveData<>();
         chatMessageListMutableLiveData = new MutableLiveData<>();
+        conversationMutableLiveData = new MutableLiveData<>();
         chatMessages = new ArrayList<>();
+    }
+
+    public MutableLiveData<Conversation> getConversationMutableLiveData() {
+        return conversationMutableLiveData;
     }
 
     public MutableLiveData<User> getUserSenderMutableLiveData() {
@@ -103,5 +118,37 @@ public class ChatRepository {
                 .collection(Constants.KEY_FIRESTORE_COLLECTION_CHAT_MESSAGES)
                 .add(chatMessage)
                 .addOnFailureListener(e -> showToast(e.getMessage()));
+    }
+
+    public void addConversation(Conversation conversation) {
+        firebaseFirestore
+                .collection(Constants.KEY_FIRESTORE_COLLECTION_CONVERSATIONS)
+                .add(conversation);
+    }
+
+    public void updateConversation(Conversation conversation) {
+        firebaseFirestore
+                .collection(Constants.KEY_FIRESTORE_COLLECTION_CONVERSATIONS)
+                .document(conversation.getId())
+                .set(conversation);
+    }
+
+    public void checkConversation(String senderId, String receiverId) {
+        checkConversationMethod(senderId, receiverId);
+        checkConversationMethod(receiverId, senderId);
+    }
+
+    private void checkConversationMethod(String senderId, String receiverId) {
+        firebaseFirestore
+                .collection(Constants.KEY_FIRESTORE_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_SENDER_ID, senderId)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, receiverId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        conversation = queryDocumentSnapshots.getDocuments().get(0).toObject(Conversation.class);
+                        conversationMutableLiveData.postValue(conversation);
+                    }
+                });
     }
 }

@@ -44,18 +44,20 @@ public class ProfileFragment extends Fragment {
     private String image;
     private Uri imageUri;
 
+    private boolean isUserUpdated;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressDialog = new ProgressDialog(getContext());
         loginRegisterViewModel = new ViewModelProvider(this).get(LoginRegisterViewModel.class);
         loginRegisterViewModel.getCurrentUser().observe(this, user -> {
-            if (currentUser == null) {
-                currentUser = user;
-                setUi(currentUser);
-            } else {
+            currentUser = user;
+            if (isUserUpdated) {
                 progressDialog.dismiss();
-                navController.navigate(R.id.action_profileFragment_to_usersFragment);
+                navController.navigate(R.id.action_profileFragment_to_recentConversationsFragment);
+            } else {
+                setUi(user);
             }
         });
     }
@@ -96,6 +98,8 @@ public class ProfileFragment extends Fragment {
     private void setListeners() {
         binding.buttonProfileSaveChanges.setOnClickListener(v -> updateUser());
         binding.buttonProfilePickPicture.setOnClickListener(v -> pickImage());
+        binding.imageViewViewProfileBack.setOnClickListener(v ->
+                navController.navigate(R.id.action_profileFragment_to_recentConversationsFragment));
     }
 
     private void updateUser() {
@@ -112,6 +116,7 @@ public class ProfileFragment extends Fragment {
                 loginRegisterViewModel.updateUser(currentUser);
             }
         }
+        isUserUpdated = true;
     }
 
     private void getUserData() {
@@ -171,6 +176,12 @@ public class ProfileFragment extends Fragment {
 
     private void showToast(String s) {
         Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isUserUpdated = false;
     }
 
     @Override

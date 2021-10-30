@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment {
             if (aBoolean) {
                 progressDialog.dismiss();
                 showToast("User successfully signed in");
-                navController.navigate(R.id.action_loginFragment_to_usersFragment);
+                navController.navigate(R.id.action_loginFragment_to_recentConversationsFragment);
             } else {
                 showToast("User unsuccessfully signed in");
                 binding.textInputEditTextLoginEmail.getText().clear();

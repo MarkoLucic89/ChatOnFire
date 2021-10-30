@@ -45,7 +45,7 @@ public class SplashFragment extends Fragment {
 
     private void goToNextActivity() {
         if (firebaseAuth.getCurrentUser() != null) {
-            navController.navigate(R.id.action_splashFragment_to_usersFragment);
+            navController.navigate(R.id.action_splashFragment_to_recentConversationsFragment);
         } else {
             navController.navigate(R.id.action_splashFragment_to_loginFragment);
         }

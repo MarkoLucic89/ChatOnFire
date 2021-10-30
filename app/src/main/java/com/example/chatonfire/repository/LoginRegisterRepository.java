@@ -60,9 +60,6 @@ public class LoginRegisterRepository {
                 });
     }
 
-    public MutableLiveData<List<User>> getUsersMutableLiveData() {
-        return usersMutableLiveData;
-    }
 
     public MutableLiveData<User> getCurrentUserMutableLiveData() {
         return currentUserMutableLiveData;
@@ -82,6 +79,7 @@ public class LoginRegisterRepository {
                     StorageReference imageReference = firebaseStorage
                             .getReference(Constants.KEY_STORAGE_UPLOADS)
                             .child(email);
+
                     imageReference.putFile(imageUri)
                             .addOnSuccessListener(taskSnapshot -> {
                                 imageReference
@@ -113,8 +111,14 @@ public class LoginRegisterRepository {
     }
 
     public void signOut() {
-        firebaseAuth.signOut();
-        isUserSignedInMutableLiveData.postValue(false);
+        firebaseFirestore.collection(Constants.KEY_FIRESTORE_COLLECTION_USERS)
+                .document(firebaseAuth.getCurrentUser().getUid())
+                .update(Constants.STATUS, Constants.STATUS_OFFLINE)
+                .addOnSuccessListener(unused -> {
+                    firebaseAuth.signOut();
+                    isUserSignedInMutableLiveData.postValue(false);
+                })
+                .addOnFailureListener(e -> showToast(e.getMessage()));
     }
 
     private void showToast(String message) {
@@ -136,11 +140,10 @@ public class LoginRegisterRepository {
 
         profileImageReference.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
-//                    String image = taskSnapshot.getUploadSessionUri().toString();
                     profileImageReference.getDownloadUrl()
                             .addOnSuccessListener(uri -> {
                                 currentUser.setUser_image(uri.toString());
-                               updateUser(currentUser);
+                                updateUser(currentUser);
                             })
                             .addOnFailureListener(e -> showToast(e.getMessage()));
                 })
@@ -148,19 +151,21 @@ public class LoginRegisterRepository {
     }
 
     public void setStatus(String status) {
-        firebaseFirestore.collection(Constants.KEY_FIRESTORE_COLLECTION_USERS)
-                .document(firebaseAuth.getCurrentUser().getUid())
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    User user = documentSnapshot.toObject(User.class);
-                    user.setUser_status(status);
-                    updateUser(user);
-                });
-
 //        firebaseFirestore.collection(Constants.KEY_FIRESTORE_COLLECTION_USERS)
 //                .document(firebaseAuth.getCurrentUser().getUid())
-//                .update(Constants.STATUS, status)
-//                .addOnFailureListener(e -> showToast(e.getMessage()));
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    User user = documentSnapshot.toObject(User.class);
+//                    user.setUser_status(status);
+//                    updateUser(user);
+//                });
+
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseFirestore.collection(Constants.KEY_FIRESTORE_COLLECTION_USERS)
+                    .document(firebaseAuth.getCurrentUser().getUid())
+                    .update(Constants.STATUS, status)
+                    .addOnFailureListener(e -> showToast(e.getMessage()));
+        }
     }
 
 }

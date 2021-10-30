@@ -16,8 +16,8 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_splashFragment_to_usersFragment"
-            app:destination="@id/usersFragment"
+            android:id="@+id/action_splashFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -27,11 +27,11 @@
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_loginFragment_to_usersFragment"
-            app:destination="@id/usersFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -40,17 +40,10 @@
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_usersFragment_to_chatFragment"
-            app:destination="@id/chatFragment"
-            app:launchSingleTop="false">
-        </action>
+            app:destination="@id/chatFragment" />
         <action
-            android:id="@+id/action_usersFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_usersFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_usersFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -61,8 +54,8 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_registerFragment_to_usersFragment"
-            app:destination="@id/usersFragment" />
+            android:id="@+id/action_registerFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -78,6 +71,9 @@
         <action
             android:id="@+id/action_chatFragment_to_usersFragment"
             app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -85,7 +81,27 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_usersFragment"
+            android:id="@+id/action_profileFragment_to_recentConversationsFragment"
+            app:destination="@id/recentConversationsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentConversationsFragment"
+        tools:layout="@layout/fragment_recent_conversations"
+        android:name="com.example.chatonfire.fragments.RecentConversationsFragment"
+        android:label="RecentConversationsFragment" >
+        <action
+            android:id="@+id/action_recentConversationsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_recentConversationsFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/recentConversationsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_recentConversationsFragment_to_usersFragment"
             app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_recentConversationsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

@@ -15,4 +15,6 @@
     <color name="green">#009C06</color>
     <color name="red">#EF1D0E</color>
     <color name="hint_color">#B1B1B1</color>
+    <color name="color_sent_message">#4F1AAE</color>
+    <color name="color_received_message">#FF3700B3</color>
 </resources>

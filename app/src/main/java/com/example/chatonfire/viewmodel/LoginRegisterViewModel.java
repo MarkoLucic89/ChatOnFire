@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginRegisterViewModel extends AndroidViewModel {
 
-    private Application application;
     private LoginRegisterRepository loginRegisterRepository;
     private MutableLiveData<User> userMutableLiveData;
     private MutableLiveData<Boolean> isUserSignedIn;
@@ -21,7 +20,6 @@ public class LoginRegisterViewModel extends AndroidViewModel {
 
     public LoginRegisterViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
         loginRegisterRepository = new LoginRegisterRepository(application);
         userMutableLiveData = loginRegisterRepository.getCurrentUserMutableLiveData();
         isUserSignedIn = loginRegisterRepository.getIsUserSignedInMutableLiveData();
@@ -48,20 +46,11 @@ public class LoginRegisterViewModel extends AndroidViewModel {
         loginRegisterRepository.login(email, password);
     }
 
-    public void signOut() {
-        loginRegisterRepository.signOut();
-    }
-
     public void updateUser(User currentUser) {
         loginRegisterRepository.updateUser(currentUser);
     }
 
     public void updateUserWithUri(User currentUser, Uri imageUri) {
         loginRegisterRepository.updateUserWithUri(currentUser, imageUri);
-
-    }
-
-    public void setStatus(String status) {
-        loginRegisterRepository.setStatus(status);
     }
 }

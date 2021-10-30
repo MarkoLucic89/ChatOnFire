@@ -60,7 +60,7 @@ public class RegisterFragment extends Fragment {
             progressDialog.dismiss();
             if (aBoolean) {
                 showToast("User " + name + " successfully signed up");
-                navController.navigate(R.id.action_registerFragment_to_usersFragment);
+                navController.navigate(R.id.action_registerFragment_to_recentConversationsFragment);
             } else {
                 showToast("User " + name + " unsuccessfully signed up");
             }
